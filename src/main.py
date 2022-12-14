@@ -1,6 +1,8 @@
 import streamlit as st
 from transformers import pipeline
 
+MODEL_NAME = "deepset/roberta-base-squad2"
+
 
 def get_context():
     return st.text_area(
@@ -18,17 +20,14 @@ def get_question():
 
 def main():
     st.title(
-        "Генератор возможных ответов на вопросы по тексту ЕГЭ (английский язык, 12-18 задания)"
+        "Генератор возможных ответов на вопросы по тексту ЕГЭ \
+            (английский язык, 12-18 задания)"
     )
-
     context_input = get_context()
     question_input = get_question()
 
-    model_name = "deepset/roberta-base-squad2"
-
     nlp = pipeline("question-answering",
-                   model=model_name,
-                   tokenizer=model_name
+                   model=MODEL_NAME,
                    )
 
     if context_input != "" and question_input != "":
@@ -38,7 +37,8 @@ def main():
         }
         result = nlp(qa_input)
 
-        st.caption("**Результат, сгенерированный на основе текста, на вопрос:**")
+        st.caption("**Результат, получившийся на основе текста, \
+            на вопрос:**")
         st.write(result["answer"])
     elif context_input != "" and question_input == "":
         st.caption("**Вопрос обработан:**")
